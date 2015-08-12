@@ -50,7 +50,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>dk.statsbiblioteket.newspaper.BatchStructureCheckerExecutable</mainClass>
+                            <mainClass>dk.statsbiblioteket.dpaviser.BatchStructureCheckerExecutable</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

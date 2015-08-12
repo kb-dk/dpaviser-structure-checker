@@ -1,12 +1,13 @@
-package dk.statsbiblioteket.newspaper;
+package dk.statsbiblioteket.dpaviser;
 
+import dk.statsbiblioteket.dpaviser.eventhandlers.BatchStructureEventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.TreeProcessorAbstractRunnableComponent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
-import dk.statsbiblioteket.newspaper.eventhandlers.BatchStructureEventHandlerFactory;
+import dk.statsbiblioteket.newspaper.Validator;
 import dk.statsbiblioteket.newspaper.schematron.StructureValidator;
 import dk.statsbiblioteket.newspaper.schematron.XmlBuilderEventHandler;
 

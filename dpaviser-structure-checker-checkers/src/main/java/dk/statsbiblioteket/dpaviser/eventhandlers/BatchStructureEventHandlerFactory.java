@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.eventhandlers;
+package dk.statsbiblioteket.dpaviser.eventhandlers;
 
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
@@ -27,6 +27,7 @@ public class BatchStructureEventHandlerFactory implements EventHandlerFactory {
         TreeNodeState nodeState = new TreeNodeState();
         eventHandlers.add(nodeState); // Must be the first eventhandler to ensure a update state used by the following handlers (a bit fragile).
         eventHandlers.add(new XmlBuilderEventHandler());
+        // ... and possibly more.
         return eventHandlers;
     }
 }

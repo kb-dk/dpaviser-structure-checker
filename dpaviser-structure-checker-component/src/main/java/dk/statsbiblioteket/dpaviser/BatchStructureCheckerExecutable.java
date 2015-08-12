@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper;
+package dk.statsbiblioteket.dpaviser;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.CallResult;
