@@ -24,8 +24,10 @@ public class BatchStructureEventHandlerFactory implements EventHandlerFactory {
     @Override
     public List<TreeEventHandler> createEventHandlers() {
         final List<TreeEventHandler> eventHandlers = new ArrayList<>();
+        /*
         TreeNodeState nodeState = new TreeNodeState();
         eventHandlers.add(nodeState); // Must be the first eventhandler to ensure a update state used by the following handlers (a bit fragile).
+        */
         eventHandlers.add(new XmlBuilderEventHandler());
         // ... and possibly more.
         return eventHandlers;
