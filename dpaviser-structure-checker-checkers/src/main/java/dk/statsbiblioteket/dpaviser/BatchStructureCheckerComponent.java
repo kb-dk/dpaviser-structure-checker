@@ -15,12 +15,16 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Properties;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.asList;
+
 /**
  * Checks the directory structure of a batch. This should run both at Ninestars and at SB.
  */
 public class BatchStructureCheckerComponent extends TreeProcessorAbstractRunnableComponent {
 
     public static final String DEMANDS_SCH = "dpaviser_structure_demands.sch";
+    public static final String DID_NOT_GENERATE_XML_ = "Did not generate xml representation of directory structure. Could not complete tests.";
 
     public BatchStructureCheckerComponent(Properties properties) {
         super(properties);
@@ -33,11 +37,12 @@ public class BatchStructureCheckerComponent extends TreeProcessorAbstractRunnabl
 
     @Override
     /**
-     * Check the batch-structure tree received for errors. (I.e. we are gonna check the received tree for
+     * Check the batch-structure tree received for errors. (I.e. we are going to check the received tree for
      * errors. The tree received represents a batch structure, which is the structure of a batch).
      *
      * @throws IOException
      */
+
     public void doWorkOnItem(Batch batch, ResultCollector resultCollector) throws Exception {
 
         EventHandlerFactory eventHandlerFactory =
@@ -47,24 +52,26 @@ public class BatchStructureCheckerComponent extends TreeProcessorAbstractRunnabl
         EventRunner eventRunner = new EventRunner(createIterator(batch), eventHandlers, resultCollector);
 
         eventRunner.run();
-        String xml = null;
-        //Need to find handler in the list returned by the EventHandlerFactory was the xml builder. One could imagine
-        // refactoring
-        //EventHandlerFactory to return a map from classname to EventHandler so that one could simple look it up.
-        for (TreeEventHandler handler : eventHandlers) {
-            if (handler instanceof XmlBuilderEventHandler) {
-                xml = ((XmlBuilderEventHandler) handler).getXml();
-            }
-        }
-        if (xml == null) {
-            throw new RuntimeException(
-                    "Did not generate xml representation of directory structure. Could not complete tests.");
-        }
 
-        storeBatchStructure(batch, new ByteArrayInputStream(xml.getBytes("UTF-8")));
+        // Afterwards ask XmlBuilderEventHandler for an XML "serialization" of the events seen.
 
-        Validator validator1 = new StructureValidator(DEMANDS_SCH);
-        validator1.validate(batch, new ByteArrayInputStream(xml.getBytes("UTF-8")), resultCollector);
+        TreeEventHandler xmlEventHandler = eventHandlers.stream()
+                .filter(handler -> handler instanceof XmlBuilderEventHandler)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(DID_NOT_GENERATE_XML_));
+
+        String xml = ((XmlBuilderEventHandler) xmlEventHandler).getXml();
+
+        // --
+
+        storeBatchStructure(batch, new ByteArrayInputStream(xml.getBytes(UTF_8)));
+
+        final List<Validator> validators = asList(
+                new StructureValidator(DEMANDS_SCH)
+        );
+        long validationCount = validators.stream()
+                .map(v -> v.validate(batch, new ByteArrayInputStream(xml.getBytes(UTF_8)), resultCollector))
+                .count();
 
     }
 }
