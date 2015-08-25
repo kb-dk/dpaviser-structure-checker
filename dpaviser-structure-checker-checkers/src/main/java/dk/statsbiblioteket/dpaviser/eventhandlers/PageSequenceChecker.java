@@ -5,6 +5,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsPa
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
 
+import java.util.NoSuchElementException;
 import java.util.TreeSet;
 
 /**
@@ -48,11 +49,16 @@ public class PageSequenceChecker extends DefaultTreeEventHandler {
 
     @Override
     public void handleNodeEnd(NodeEndParsingEvent event) {
-        if (isDay(event.getName())){
-            if (pageNumbers.first() != 1 || pageNumbers.size() != pageNumbers.last()) {
-                resultCollector.addFailure(event.getName(),"Structure","","Wrong count of pages");
+        if (isDay(event.getName())) {
+            try {
+                if (pageNumbers.first() != 1 || pageNumbers.size() != pageNumbers.last()) {
+                    resultCollector.addFailure(event.getName(), "Structure", "", "Wrong count of pages");
+                }
+                pageNumbers.clear();
+            } catch (NoSuchElementException e) {
+                // FIXME: Fails for TRA for Infomedia batch 1.
+                throw new RuntimeException("pageNumbers=" + pageNumbers, e);
             }
-            pageNumbers.clear();
         }
     }
 
