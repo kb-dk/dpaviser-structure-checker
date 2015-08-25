@@ -31,6 +31,7 @@ public class BatchStructureEventHandlerFactory implements EventHandlerFactory {
         eventHandlers.add(nodeState); // Must be the first eventhandler to ensure a update state used by the following handlers (a bit fragile).
         */
         eventHandlers.add(new XmlBuilderEventHandler());
+        eventHandlers.add(new PageSequenceChecker(resultCollector));
         // ... and possibly more.
         return eventHandlers;
     }
