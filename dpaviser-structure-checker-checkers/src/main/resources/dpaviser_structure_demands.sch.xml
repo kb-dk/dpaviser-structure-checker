@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<s:schema xmlns:s="http://purl.oclc.org/dsdl/schematron">
+    <!-- NOTE: When adding new checks (asserts or reports) to this schema, remember to prepend them
+         with a comment of the form "Check: <pattern-name>: <explanation>" as this enables us to easily
+         generate a list (by grep) of all the things that are checked for. -->
+
+    <s:let name="sourceFormat" value="'^[A-Z0-9]+$'"/>
+<!--
+    <s:let name="yearNode" value="/node/node/node"/>
+    <s:let name="yearFormat" value="'^(000[1-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3})$'"/>
+-->
+
+    <s:pattern id="batchNodeChecker">
+        <s:rule context="/node/node">
+            <!-- Check: batchNodeChecker: In batch folder, all folder names have form: '^[A-Z0-9]+$' I.e. source folders. No other folders -->
+            <s:assert test="matches(@shortName,$sourceFormat)"><s:value-of select="@name"/>: AA-S1:
+                Invalid "Infomedia kildekode" folder name. Expected form: <s:value-of select="$sourceFormat"/>
+            </s:assert>
+        </s:rule>
+    </s:pattern>
+
+
+
+
+
+
+
+
+<!--
+
+
+    <s:pattern id="sourceNodeChecker">
+        <s:rule context="/node"> -->
+            <!-- Check: sourceNodeChecker: Existence of nodes under source-node, i.e. year-nodes -->
+<!--            <s:assert test="node[@shortName = $workshiftISOTarget]"><s:value-of select="@name"/>: AA-S2:
+                No node found under source node.
+            </s:assert>
+
+            <s:assert test="..."><s:value-of select="@name"/>: AA-S1:
+                Invalid ... Expected form: ...
+            </s:assert>
+        </s:rule>
+    </s:pattern>
+
+
+
+
+
+    <s:pattern id="...">
+        <s:rule context="/node">
+            <s:assert test="..."><s:value-of select="@name"/>: AA-S1:
+                Invalid ... Expected form: ...
+            </s:assert>
+        </s:rule>
+    </s:pattern>
+-->
+
+
+
+
+</s:schema>

@@ -23,7 +23,7 @@ import static java.util.Arrays.asList;
  */
 public class BatchStructureCheckerComponent extends TreeProcessorAbstractRunnableComponent {
 
-    public static final String DEMANDS_SCH = "dpaviser_structure_demands.sch";
+    public static final String DEMANDS_SCH = "dpaviser_structure_demands.sch.xml";
     public static final String DID_NOT_GENERATE_XML_ = "Did not generate xml representation of directory structure. Could not complete tests.";
 
     public BatchStructureCheckerComponent(Properties properties) {
