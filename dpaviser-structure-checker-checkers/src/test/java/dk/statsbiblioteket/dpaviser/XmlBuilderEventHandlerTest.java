@@ -22,7 +22,10 @@ import static org.testng.Assert.assertTrue;
  */
 public class XmlBuilderEventHandlerTest {
 
-    @Test(groups = "testDataTest")
+    @Test(groups = "testDataTest", enabled = false)
+    /**
+     * TODO fix this to use a general infomedia download location
+     */
     public void testGetXml() throws Exception {
         TreeIterator iterator = new TransformingIteratorForFileSystems(new File("/Users/jrg/tmp/infomedia"),
                 TransformingIteratorForFileSystems.GROUPING_PATTERN_DEFAULT_VALUE,
