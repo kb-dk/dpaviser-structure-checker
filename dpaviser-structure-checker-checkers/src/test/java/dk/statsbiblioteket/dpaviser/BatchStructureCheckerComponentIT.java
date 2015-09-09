@@ -18,6 +18,7 @@ import static org.testng.Assert.assertTrue;
 /**
 TODO fix this to work with the infomedia stuff
  */
+@SuppressWarnings("deprecation") // ResultCollector
 public class BatchStructureCheckerComponentIT {
     private final static String TEST_BATCH_ID = "400022028241";
     private final Properties properties = new Properties();

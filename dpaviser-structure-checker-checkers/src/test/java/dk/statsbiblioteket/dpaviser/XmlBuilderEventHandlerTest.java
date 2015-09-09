@@ -12,7 +12,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -35,7 +34,7 @@ public class XmlBuilderEventHandlerTest {
                         TransformingIteratorForFileSystems.IGNORED_FILES_DEFAULT_VALUE
                                 .split(",")));
 
-        List<TreeEventHandler> handlers = new ArrayList<TreeEventHandler>();
+        List<TreeEventHandler> handlers = new ArrayList<>();
         XmlBuilderEventHandler xmlBuilderEventHandler = new XmlBuilderEventHandler();
         handlers.add(xmlBuilderEventHandler);
         EventRunner eventRunner = new EventRunner(iterator, handlers, null);
