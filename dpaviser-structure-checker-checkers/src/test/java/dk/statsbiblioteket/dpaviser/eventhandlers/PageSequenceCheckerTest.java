@@ -39,20 +39,20 @@ public class PageSequenceCheckerTest {
     @Test
     public void testGetPageNumber(){
         PageSequenceChecker sequenceChecker = new PageSequenceChecker(null);
-        assertThat(sequenceChecker.getPageNumer("infomed/JYP/2015/06/01/JYP20150601L11#0002.pdf"), is(2));
+        assertThat(sequenceChecker.getPageNumber("infomed/JYP/2015/06/01/JYP20150601L11#0002.pdf"), is(2));
     }
 
     @Test(expectedExceptions = ArrayIndexOutOfBoundsException.class)
     public void testGetPageNumber2(){
         PageSequenceChecker sequenceChecker = new PageSequenceChecker(null);
-        assertThat(sequenceChecker.getPageNumer("infomed/JYP/2015/06/01/JYP20150601L11#0002,pdf"), is(2));
+        assertThat(sequenceChecker.getPageNumber("infomed/JYP/2015/06/01/JYP20150601L11#0002,pdf"), is(2));
     }
 
 
     @Test
     public void testGetPageNumber3(){
         PageSequenceChecker sequenceChecker = new PageSequenceChecker(null);
-        assertThat(sequenceChecker.getPageNumer("infomed/JYP/2015/06/01/JYP20150601L11#9999.pdf"), is(9999));
+        assertThat(sequenceChecker.getPageNumber("infomed/JYP/2015/06/01/JYP20150601L11#9999.pdf"), is(9999));
     }
 
 
