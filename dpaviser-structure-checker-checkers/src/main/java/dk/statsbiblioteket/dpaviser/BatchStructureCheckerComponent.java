@@ -1,5 +1,6 @@
 package dk.statsbiblioteket.dpaviser;
 
+import dk.statsbiblioteket.dpaviser.eventhandlers.InputStreamSizeChecker;
 import dk.statsbiblioteket.dpaviser.eventhandlers.PageSequenceChecker;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
@@ -20,6 +21,7 @@ import static java.util.Arrays.asList;
 /**
  * Checks the directory structure of a batch. This should run both at Ninestars and at SB.
  */
+@SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
 public class BatchStructureCheckerComponent extends TreeProcessorAbstractRunnableComponent {
 
     public static final String DEMANDS_SCH = "dpaviser_structure_demands.sch.xml";
@@ -44,33 +46,29 @@ public class BatchStructureCheckerComponent extends TreeProcessorAbstractRunnabl
 
     public void doWorkOnItem(Batch batch, ResultCollector resultCollector) throws Exception {
 
+        XmlBuilderEventHandler xmlBuilderEventHandler = new XmlBuilderEventHandler();
+
         final List<TreeEventHandler> eventHandlers = asList(
-                new XmlBuilderEventHandler(),
-                new PageSequenceChecker(resultCollector)
+                xmlBuilderEventHandler,
+                new PageSequenceChecker(resultCollector),
+                new InputStreamSizeChecker(resultCollector, event -> event.getName().endsWith(".pdf/contents"), 10_000)
         );
 
         EventRunner eventRunner = new EventRunner(createIterator(batch), eventHandlers, resultCollector);
 
         eventRunner.run();
 
-        // Afterwards locate and ask an XmlBuilderEventHandler for an XML "serialization" of the events seen.
+        // Afterwards ask the XmlBuilderEventHandler for an XML "serialization" of the events seen.
 
-        TreeEventHandler xmlEventHandler = eventHandlers.stream()
-                .filter(handler -> handler instanceof XmlBuilderEventHandler)
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException(DID_NOT_GENERATE_XML_));
+        byte[] xmlBytes = xmlBuilderEventHandler.getXml().getBytes(UTF_8);
 
-        String xml = ((XmlBuilderEventHandler) xmlEventHandler).getXml();
-
-        // --
-
-        storeBatchStructure(batch, new ByteArrayInputStream(xml.getBytes(UTF_8)));
+        storeBatchStructure(batch, new ByteArrayInputStream(xmlBytes));
 
         final List<Validator> validators = asList(
                 new StructureValidator(DEMANDS_SCH)
         );
         long validationCount = validators.stream()
-                .map(v -> v.validate(batch, new ByteArrayInputStream(xml.getBytes(UTF_8)), resultCollector))
+                .map(v -> v.validate(batch, new ByteArrayInputStream(xmlBytes), resultCollector))
                 .count();
 
     }
