@@ -1,10 +1,9 @@
 package dk.statsbiblioteket.dpaviser;
 
-import dk.statsbiblioteket.dpaviser.eventhandlers.BatchStructureEventHandlerFactory;
+import dk.statsbiblioteket.dpaviser.eventhandlers.PageSequenceChecker;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.TreeProcessorAbstractRunnableComponent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 import dk.statsbiblioteket.newspaper.Validator;
@@ -45,15 +44,16 @@ public class BatchStructureCheckerComponent extends TreeProcessorAbstractRunnabl
 
     public void doWorkOnItem(Batch batch, ResultCollector resultCollector) throws Exception {
 
-        EventHandlerFactory eventHandlerFactory =
-                new BatchStructureEventHandlerFactory(getProperties(), resultCollector);
+        final List<TreeEventHandler> eventHandlers = asList(
+                new XmlBuilderEventHandler(),
+                new PageSequenceChecker(resultCollector)
+        );
 
-        final List<TreeEventHandler> eventHandlers = eventHandlerFactory.createEventHandlers();
         EventRunner eventRunner = new EventRunner(createIterator(batch), eventHandlers, resultCollector);
 
         eventRunner.run();
 
-        // Afterwards ask XmlBuilderEventHandler for an XML "serialization" of the events seen.
+        // Afterwards locate and ask an XmlBuilderEventHandler for an XML "serialization" of the events seen.
 
         TreeEventHandler xmlEventHandler = eventHandlers.stream()
                 .filter(handler -> handler instanceof XmlBuilderEventHandler)

@@ -32,7 +32,7 @@ public class PageSequenceChecker extends DefaultTreeEventHandler {
         }
     }
 
-    private final Pattern pageNumberPattern = Pattern.compile("\\#(\\d+)\\.pdf");
+    private final Pattern pageNumberPattern = Pattern.compile("\\#(\\w+)\\.pdf");
 
     protected int getPageNumber(String name) {
         // Name is like this infomed/JYP/2015/06/01/JYP20150601L11#0002.pdf

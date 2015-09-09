@@ -12,6 +12,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.testng.Assert.fail;
 
 
 public class PageSequenceCheckerTest {
@@ -124,6 +125,14 @@ public class PageSequenceCheckerTest {
         sequenceChecker.handleNodeEnd(new NodeEndParsingEvent("infomed/JYP/2015/06/01"));
         verifyZeroInteractions(resultCollector);
     }
+
+    @Test(expectedExceptions = NumberFormatException.class)
+    public void testBadPageNumber() {
+        PageSequenceChecker sequenceChecker = new PageSequenceChecker(null);
+        sequenceChecker.getPageNumber("infomed/JYP/2015/06/01/JYP20150601L11#000X.pdf");
+        fail("should not accept broken pagenumber");
+    }
+
 
 
 }
